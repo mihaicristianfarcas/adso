@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export const Heading = () => {
   return (
-    <div className='flex max-w-3xl flex-col items-center justify-center space-y-4 gap-y-4 lg:flex-row'>
+    <div className='flex max-w-3xl flex-col items-center justify-center space-y-4 gap-y-4 py-22 lg:flex-row'>
       <Image
         src='/journal.png'
         alt='Journal'
@@ -22,9 +22,9 @@ export const Heading = () => {
         className='hidden object-contain dark:block'
       />
       <div className='flex flex-col items-center justify-center space-y-4 gap-y-4'>
-        <h1 className='text-3xl font-bold text-nowrap sm:text-4xl md:text-5xl'>
-          Your thoughts, organized. <br /> Your ideas, articulated. <br />
-          Meet <span className='italic'>Adso</span>.
+        <h1 className='text-3xl text-nowrap sm:text-4xl md:text-5xl'>
+          Your thoughts, organised. <br /> Your ideas, articulated. <br />
+          Meet <span className='font-bold'>Adso</span>.
         </h1>
         <h3 className='text-base font-medium sm:text-xl md:text-2xl'>
           Adso is a note-taking app designed to help you explore your deepest
