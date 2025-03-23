@@ -10,8 +10,21 @@ const font = Poppins({
 
 export const Logo = () => {
   return (
-    <div className='hidden items-center gap-x-4 md:flex'>
-      <Image src='/logo.png' alt='Logo' width={40} height={40} />
+    <div className='hidden items-center gap-x-2 md:flex'>
+      {/* <Image
+        src='/journal.png'
+        alt='Journal'
+        width={40}
+        height={40}
+        className='object-contain dark:hidden'
+      />
+      <Image
+        src='/journal-dark.png'
+        alt='Journal'
+        width={40}
+        height={40}
+        className='hidden object-contain dark:block'
+      /> */}
       <p className={cn('font-semibold', font.className)}>Adso</p>
     </div>
   )
