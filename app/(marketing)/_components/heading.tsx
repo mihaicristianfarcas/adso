@@ -13,7 +13,13 @@ export const Heading = () => {
 
   return (
     <div className='flex max-w-3xl flex-col items-center justify-center space-y-4 gap-x-4 gap-y-4 px-22 py-28 lg:flex-row'>
-      <Image src='/logo.png' alt='Journal' width={400} height={400} />
+      <Image
+        src='/logo.png'
+        alt='Journal'
+        width={400}
+        height={400}
+        className='h-[250px] w-[200px] md:h-[370px] md:w-[300px]'
+      />
       <div className='flex flex-col items-center justify-center space-y-4 gap-y-4'>
         <h1 className='text-3xl text-nowrap sm:text-4xl md:text-5xl'>
           Your thoughts, organised. <br /> Your ideas, articulated. <br />
@@ -30,7 +36,10 @@ export const Heading = () => {
         )}
         {isAuthenticated && !isLoading && (
           <Button asChild>
-            <Link href='/documents'>Enter Adso</Link>
+            <Link href='/documents'>
+              Enter Adso
+              <ArrowRight className='h-4 w-4' />
+            </Link>
           </Button>
         )}
         {!isAuthenticated && !isLoading && (
