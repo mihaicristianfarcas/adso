@@ -5,6 +5,7 @@ import { ChevronsLeft, MenuIcon } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
+import UserItem from './user-item'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -73,7 +74,7 @@ const Navigation = () => {
       navbarRef.current.style.setProperty('left', isMobile ? '100%' : '240px')
       setTimeout(() => {
         setIsResetting(false)
-      }, 300)
+      }, 200)
     }
   }
 
@@ -87,7 +88,7 @@ const Navigation = () => {
 
       setTimeout(() => {
         setIsResetting(false)
-      }, 300)
+      }, 200)
     }
   }
 
@@ -97,7 +98,7 @@ const Navigation = () => {
         ref={sidebarRef}
         className={cn(
           'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col overflow-y-auto',
-          isResetting && 'transition-all duration-300 ease-in-out',
+          isResetting && 'transition-all duration-200 ease-in-out',
           isMobile && 'w-0'
         )}
       >
@@ -105,14 +106,14 @@ const Navigation = () => {
           onClick={collapse}
           role='button'
           className={cn(
-            'text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600',
+            'text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600',
             isMobile && 'opacity-100'
           )}
         >
           <ChevronsLeft className='h-6 w-6' />
         </div>
         <div>
-          <p>Action Items</p>
+          <UserItem />
         </div>
         <div className='mt-4'>
           <p>Documents</p>
@@ -127,7 +128,7 @@ const Navigation = () => {
         ref={navbarRef}
         className={cn(
           'absolute top-0 left-60 z-[99999] w-[calc(100%-240px)]',
-          isResetting && 'transition-all duration-300 ease-in-out',
+          isResetting && 'transition-all duration-200 ease-in-out',
           isMobile && 'left-0 w-full'
         )}
       >
