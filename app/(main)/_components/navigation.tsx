@@ -10,7 +10,7 @@ import {
   Settings,
   Trash
 } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserItem from './user-item'
@@ -27,6 +27,7 @@ import {
 import { TrashBox } from './trash_box'
 import { useSearch } from '@/hooks/use-search'
 import { useSettings } from '@/hooks/use-settings'
+import { Navbar } from './navbar'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -39,6 +40,8 @@ const Navigation = () => {
   const [isCollapsed, setIsCollapsed] = useState(isMobile)
   const search = useSearch()
   const settings = useSettings()
+
+  const params = useParams()
 
   const create = useMutation(api.documents.create)
 
@@ -182,15 +185,19 @@ const Navigation = () => {
           isMobile && 'left-0 w-full'
         )}
       >
-        <nav className='w-full bg-transparent px-3 py-2'>
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role='button'
-              className='text-muted-foreground h-6 w-6'
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className='w-full bg-transparent px-3 py-2'>
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                role='button'
+                className='text-muted-foreground h-6 w-6'
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   )
