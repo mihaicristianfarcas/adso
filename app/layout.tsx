@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
+
 import { ThemeProvider } from '@/components/providers/theme-provider'
 import { ConvexClientProvider } from '@/components/providers/convex-provider'
+import { ModalProvider } from '@/components/providers/modal-provider'
+
 import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
@@ -41,6 +44,7 @@ export default function RootLayout({
             storageKey='adso-theme'
           >
             <Toaster position='bottom-center' />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexClientProvider>

@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/popover'
 import { TrashBox } from './trash_box'
 import { useSearch } from '@/hooks/use-search'
+import { useSettings } from '@/hooks/use-settings'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -37,6 +38,7 @@ const Navigation = () => {
   const [isResetting, setIsResetting] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(isMobile)
   const search = useSearch()
+  const settings = useSettings()
 
   const create = useMutation(api.documents.create)
 
@@ -119,9 +121,9 @@ const Navigation = () => {
     const promise = create({ title: 'Untitled' })
 
     toast.promise(promise, {
-      loading: 'Preparing a fresh manuscript...',
-      success: 'New manuscript prepared!',
-      error: 'Failed to prepare manuscript'
+      loading: 'Preparing a fresh document...',
+      success: 'New document prepared!',
+      error: 'Failed to prepare document'
     })
   }
 
@@ -148,12 +150,8 @@ const Navigation = () => {
         <div>
           <UserItem />
           <Item label='Search' icon={Search} isSearch onClick={search.onOpen} />
-          <Item label='Settings' icon={Settings} onClick={() => {}} />
-          <Item
-            onClick={handleCreate}
-            label='New manuscript'
-            icon={PlusCircle}
-          />
+          <Item label='Settings' icon={Settings} onClick={settings.onOpen} />
+          <Item onClick={handleCreate} label='New document' icon={PlusCircle} />
         </div>
         <div className='mt-4'>
           <DocumentList />

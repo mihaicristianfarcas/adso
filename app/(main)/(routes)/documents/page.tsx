@@ -16,9 +16,9 @@ const DocumentsPage = () => {
     const promise = create({ title: 'Untitled' })
 
     toast.promise(promise, {
-      loading: 'Preparing a fresh manuscript...',
-      success: 'New manuscript prepared!',
-      error: 'Failed to prepare manuscript'
+      loading: 'Preparing a fresh document...',
+      success: 'New document prepared!',
+      error: 'Failed to prepare document'
     })
   }
 
@@ -26,11 +26,11 @@ const DocumentsPage = () => {
     <div className='flex h-full flex-col items-center justify-center space-y-4'>
       <Image src='/logo.png' alt='Empty' width={200} height={200} />
       <h2 className='text-lg font-medium'>
-        Welcome to Adso&apos;s scriptorium, {user?.firstName}
+        Welcome to Adso, {user?.firstName}
       </h2>
       <Button onClick={onCreate}>
         <PlusCircle className='mr-2 h-4 w-4' />
-        New Manuscript
+        New document
       </Button>
     </div>
   )
