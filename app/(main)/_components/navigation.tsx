@@ -124,9 +124,9 @@ const Navigation = () => {
     const promise = create({ title: 'Untitled' })
 
     toast.promise(promise, {
-      loading: 'Preparing a fresh document...',
-      success: 'New document prepared!',
-      error: 'Failed to prepare document'
+      loading: 'Creating a new document...',
+      success: 'New document created!',
+      error: 'Failed to create a new document'
     })
   }
 
