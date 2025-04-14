@@ -66,5 +66,5 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
 }
 
 Cover.Skeleton = function CoverSkeleton() {
-  return <Skeleton className='h-[12vh] w-full' />
+  return <Skeleton className='h-[35vh] w-full' />
 }
