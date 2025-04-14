@@ -6,6 +6,7 @@ import { ConvexClientProvider } from '@/components/providers/convex-provider'
 import { ModalProvider } from '@/components/providers/modal-provider'
 
 import { Toaster } from 'sonner'
+import { EdgeStoreProvider } from '@/lib/edgestore'
 
 export const metadata: Metadata = {
   title: 'Adso',
@@ -36,17 +37,19 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body className={`antialiased`}>
         <ConvexClientProvider>
-          <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
-            enableSystem
-            disableTransitionOnChange
-            storageKey='adso-theme'
-          >
-            <Toaster position='bottom-center' />
-            <ModalProvider />
-            {children}
-          </ThemeProvider>
+          <EdgeStoreProvider>
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+              storageKey='adso-theme'
+            >
+              <Toaster position='bottom-center' />
+              <ModalProvider />
+              {children}
+            </ThemeProvider>
+          </EdgeStoreProvider>
         </ConvexClientProvider>
       </body>
     </html>

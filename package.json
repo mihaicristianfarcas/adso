@@ -31,6 +31,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-dropzone": "^14.3.8",
     "react-textarea-autosize": "^8.5.9",
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2",
