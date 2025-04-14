@@ -19,6 +19,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialData.title)
   const update = useMutation(api.documents.update)
+  const removeIcon = useMutation(api.documents.removeIcon)
 
   const enableInput = () => {
     if (preview) return
@@ -52,17 +53,30 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     }
   }
 
+  const onIconSelect = (icon: string) => {
+    update({
+      id: initialData._id,
+      icon
+    })
+  }
+
+  const onIconRemove = () => {
+    removeIcon({
+      id: initialData._id
+    })
+  }
+
   return (
     <div className='group relative pl-[54px]'>
       {!!initialData.icon && !preview && (
         <div className='group/icon flex items-center gap-x-2 pt-6'>
-          <IconPicker onChange={() => {}}>
+          <IconPicker onChange={onIconSelect}>
             <p className='text-6xl transition hover:opacity-75'>
               {initialData.icon}
             </p>
           </IconPicker>
           <Button
-            onClick={() => {}}
+            onClick={onIconRemove}
             className='text-muted-foreground rounded-full text-xs opacity-0 transition group-hover/icon:opacity-100'
             variant='outline'
             size='icon'
@@ -76,7 +90,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
       )}
       <div className='flex items-center gap-x-1 py-4 opacity-0 group-hover:opacity-100'>
         {!initialData.icon && !preview && (
-          <IconPicker onChange={() => {}} asChild>
+          <IconPicker onChange={onIconSelect} asChild>
             <Button
               className='text-muted-foreground text-xs'
               variant='outline'
@@ -87,7 +101,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
             </Button>
           </IconPicker>
         )}
-        {!initialData.icon && !preview && (
+        {!initialData.coverImage && !preview && (
           <Button
             className='text-muted-foreground text-xs'
             variant='outline'
