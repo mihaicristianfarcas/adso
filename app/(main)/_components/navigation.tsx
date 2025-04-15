@@ -10,7 +10,7 @@ import {
   Settings,
   Trash
 } from 'lucide-react'
-import { useParams, usePathname } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import UserItem from './user-item'
@@ -32,6 +32,7 @@ import { Navbar } from './navbar'
 const Navigation = () => {
   const pathname = usePathname()
   const isMobile = useMediaQuery('(max-width: 768px)')
+  const router = useRouter()
 
   const isResizingRef = useRef(false)
   const sidebarRef = useRef<HTMLElement>(null)
@@ -121,7 +122,9 @@ const Navigation = () => {
   }
 
   const handleCreate = async () => {
-    const promise = create({ title: 'Untitled' })
+    const promise = create({ title: 'Untitled' }).then(documentId => {
+      router.push(`/documents/${documentId}`)
+    })
 
     toast.promise(promise, {
       loading: 'Creating a new document...',
