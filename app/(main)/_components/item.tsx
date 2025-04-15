@@ -119,7 +119,7 @@ const Item = ({
       {documentIcon ? (
         <div className='mr-2 shrink-0 text-[18px]'>{documentIcon}</div>
       ) : (
-        <Icon className='text-muted-foreground mr-2 h-[18px] shrink-0' />
+        <Icon className='text-muted-foreground mr-2 h-[18px] w-[18px] shrink-0' />
       )}
       <span className='truncate'>{label}</span>
       {isSearch && (

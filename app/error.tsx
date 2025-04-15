@@ -10,7 +10,7 @@ const Error = () => {
       <Image src='/logo.png' height='300' width='300' alt='Logo' />
       <h2 className='text-xl font-medium'>Something went wrong!</h2>
       <Button asChild>
-        <Link href='/documents'>Go back to your documents</Link>
+        <Link href='/documents'>Go back</Link>
       </Button>
     </div>
   )
