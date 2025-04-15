@@ -57,7 +57,9 @@ const Item = ({
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation()
     if (!id) return
-    const promise = archive({ id })
+    const promise = archive({ id }).then(() => {
+      router.push('/documents')
+    })
 
     toast.promise(promise, {
       loading: 'Moving to trash...',
@@ -82,7 +84,7 @@ const Item = ({
         if (!expanded) {
           onExpand?.()
         }
-        // router.push(`/documents/${documentId}`)
+        router.push(`/documents/${documentId}`)
       }
     )
 
