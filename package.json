@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@blocknote/core": "^0.28.0",
+    "@blocknote/mantine": "^0.28.0",
+    "@blocknote/react": "^0.28.0",
     "@clerk/clerk-react": "^5.25.2",
     "@edgestore/react": "^0.3.3",
     "@edgestore/server": "^0.3.3",
