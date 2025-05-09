@@ -11,6 +11,7 @@ import { useParams } from 'next/navigation'
 import { Id } from '@/convex/_generated/dataModel'
 import { useEdgeStore } from '@/lib/edgestore'
 import { Skeleton } from './ui/skeleton'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
 
 interface CoverImageProps {
   url?: string
@@ -22,6 +23,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
   const coverImage = useCoverImage()
   const removeCoverImage = useMutation(api.documents.removeCoverImage)
   const { edgestore } = useEdgeStore()
+  const { isTouchDevice } = useDeviceDetect()
 
   const onRemove = async () => {
     if (url) {
@@ -40,7 +42,12 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
     >
       {!!url && <Image src={url} fill alt='cover' className='object-cover' />}
       {url && !preview && (
-        <div className='absolute right-5 bottom-5 flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100'>
+        <div
+          className={cn(
+            'absolute right-5 bottom-5 flex items-center justify-center gap-2',
+            isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          )}
+        >
           <Button
             onClick={() => coverImage.onReplace(url)}
             className='text-muted-foreground text-xs'

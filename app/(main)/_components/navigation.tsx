@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
 import UserItem from './user-item'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
@@ -31,7 +31,7 @@ import { Navbar } from './navbar'
 
 const Navigation = () => {
   const pathname = usePathname()
-  const isMobile = useMediaQuery('(max-width: 768px)')
+  const { isMobile, isTouchDevice } = useDeviceDetect()
   const router = useRouter()
 
   const isResizingRef = useRef(false)
@@ -148,7 +148,7 @@ const Navigation = () => {
           role='button'
           className={cn(
             'text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600',
-            isMobile && 'opacity-100'
+            isTouchDevice && 'opacity-100'
           )}
         >
           <ChevronsLeft className='h-6 w-6' />
@@ -168,8 +168,8 @@ const Navigation = () => {
             <Item label='Trash' icon={Trash} />
           </PopoverTrigger>
           <PopoverContent
-            side={isMobile ? 'bottom' : 'right'}
-            className='w-72 p-0'
+            side={isTouchDevice ? 'bottom' : 'right'}
+            className='shadow-accent w-72 p-0'
           >
             <TrashBox />
           </PopoverContent>
@@ -177,7 +177,12 @@ const Navigation = () => {
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
-          className='bg-primary/10 absolute top-0 right-0 h-full w-1 cursor-ew-resize opacity-0 transition group-hover/sidebar:opacity-100'
+          className={cn(
+            'bg-primary/10 absolute top-0 right-0 h-full w-1 cursor-ew-resize',
+            isTouchDevice
+              ? 'opacity-100'
+              : 'opacity-0 group-hover/sidebar:opacity-100'
+          )}
         />
       </aside>
       <div

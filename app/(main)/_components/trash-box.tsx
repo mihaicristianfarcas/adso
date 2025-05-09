@@ -68,7 +68,7 @@ export const TrashBox = () => {
           value={search}
           onChange={e => setSearch(e.target.value)}
           placeholder='Filter by page title...'
-          className='bg-secondary h-7 px-2 focus-visible:ring-transparent'
+          className='bg-background h-7 px-2 focus-visible:ring-transparent'
         />
       </div>
       <div className='mt-2 px-1 pb-1'>
@@ -87,13 +87,13 @@ export const TrashBox = () => {
               <div
                 onClick={e => onRestore(e, document._id)}
                 role='button'
-                className='rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600'
+                className='hover:bg-accent hover:text-accent-foreground rounded-sm p-2'
               >
                 <Undo className='text-muted-foreground h-4 w-4' />
               </div>
               <ConfirmModal onConfirm={() => onRemove(document._id)}>
-                <div className='rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600'>
-                  <Trash className='text-muted-foreground h-4 w-4' />
+                <div className='hover:bg-destructive/10 dark:hover:bg-destructive/20 rounded-sm p-2'>
+                  <Trash className='text-muted-foreground hover:text-destructive h-4 w-4' />
                 </div>
               </ConfirmModal>
             </div>

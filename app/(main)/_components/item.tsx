@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
 
 interface ItemProps {
   id?: Id<'documents'>
@@ -53,6 +54,7 @@ const Item = ({
   const router = useRouter()
   const create = useMutation(api.documents.create)
   const archive = useMutation(api.documents.archive)
+  const { isTouchDevice } = useDeviceDetect()
 
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation()
@@ -136,7 +138,12 @@ const Item = ({
             >
               <div
                 role='button'
-                className='h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+                className={cn(
+                  'h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600',
+                  isTouchDevice
+                    ? 'opacity-100'
+                    : 'opacity-0 group-hover:opacity-100'
+                )}
               >
                 <MoreHorizontal className='text-muted-foreground h-4 w-4' />
               </div>
@@ -160,7 +167,12 @@ const Item = ({
           <div
             role='button'
             onClick={onCreate}
-            className='ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600'
+            className={cn(
+              'ml-auto h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600',
+              isTouchDevice
+                ? 'opacity-100'
+                : 'opacity-0 group-hover:opacity-100'
+            )}
           >
             <Plus className='text-muted-foreground h-4 w-4' />
           </div>

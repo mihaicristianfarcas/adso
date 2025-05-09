@@ -12,7 +12,7 @@ export const Heading = () => {
   const { isAuthenticated, isLoading } = useConvexAuth()
 
   return (
-    <div className='flex max-w-3xl flex-col items-center justify-center space-y-4 gap-x-4 gap-y-4 px-22 py-28 lg:flex-row'>
+    <div className='flex max-w-3xl flex-col items-center justify-center space-y-4 gap-x-4 gap-y-4 px-4 py-12 md:px-22 md:py-28 lg:flex-row'>
       <Image
         src='/logo.png'
         alt='Journal'

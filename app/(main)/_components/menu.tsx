@@ -45,7 +45,7 @@ export const Menu = ({ documentId }: MenuProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className='w-60'
+        className='shadow-accent w-60'
         align='end'
         alignOffset={8}
         forceMount

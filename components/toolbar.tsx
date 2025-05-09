@@ -9,6 +9,8 @@ import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import TextAreaAutosize from 'react-textarea-autosize'
 import { useCoverImage } from '@/hooks/use-cover-image'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
+import { cn } from '@/lib/utils'
 
 interface ToolbarProps {
   initialData: Doc<'documents'>
@@ -22,6 +24,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   const update = useMutation(api.documents.update)
   const removeIcon = useMutation(api.documents.removeIcon)
   const coverImage = useCoverImage()
+  const { isTouchDevice } = useDeviceDetect()
 
   const enableInput = () => {
     if (preview) return
@@ -79,7 +82,12 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           </IconPicker>
           <Button
             onClick={onIconRemove}
-            className='text-muted-foreground rounded-full text-xs opacity-0 transition group-hover/icon:opacity-100'
+            className={cn(
+              'text-muted-foreground rounded-full text-xs transition',
+              isTouchDevice
+                ? 'opacity-100'
+                : 'opacity-0 group-hover/icon:opacity-100'
+            )}
             variant='outline'
             size='icon'
           >
@@ -90,7 +98,12 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
       {!!initialData.icon && preview && (
         <p className='pt-6 text-6xl'>{initialData.icon}</p>
       )}
-      <div className='flex items-center gap-x-1 py-4 opacity-0 group-hover:opacity-100'>
+      <div
+        className={cn(
+          'flex items-center gap-x-1 py-4',
+          isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        )}
+      >
         {!initialData.icon && !preview && (
           <IconPicker onChange={onIconSelect} asChild>
             <Button
