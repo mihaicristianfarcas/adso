@@ -169,7 +169,7 @@ const Navigation = () => {
           </PopoverTrigger>
           <PopoverContent
             side={isTouchDevice ? 'bottom' : 'right'}
-            className='shadow-accent w-72 p-0'
+            className='w-72 p-0'
           >
             <TrashBox />
           </PopoverContent>
