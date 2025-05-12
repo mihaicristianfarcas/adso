@@ -9,19 +9,22 @@ export const useDeviceDetect = () => {
     '(min-width: 769px) and (max-width: 1024px)'
   )
 
-  // Check if device is tablet in landscape orientation (larger width but still touch-based)
+  // Check if device is tablet in landscape orientation (based only on screen size)
   const isTabletLandscape = useMediaQuery(
-    '(min-width: 1025px) and (max-width: 1366px) and (hover: none)'
+    '(min-width: 1025px) and (max-width: 1366px)'
   )
 
-  // Check if device has touch capability
+  // Check if device has touch capability (regardless of screen size)
+  // This uses 'hover: none' which means the device doesn't support hover
+  // and 'pointer: coarse' which indicates touch input
   const hasTouchScreen = useMediaQuery('(hover: none) and (pointer: coarse)')
 
   // Combine tablet detection for both orientations
   const isTablet = isTabletPortrait || isTabletLandscape
 
-  // A device is a touch device if it's either mobile, tablet, or has a touch screen
-  const isTouchDevice = isMobile || isTablet || hasTouchScreen
+  // A device is a touch device if it has a touch screen (not based on screen size)
+  // This is the property that should be used for showing/hiding hover elements
+  const isTouchDevice = hasTouchScreen
 
   return {
     isMobile,
