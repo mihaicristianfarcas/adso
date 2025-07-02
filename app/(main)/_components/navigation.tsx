@@ -14,6 +14,7 @@ import { useMutation } from 'convex/react'
 import {
   ChevronsLeft,
   MenuIcon,
+  MessageCircle,
   Plus,
   PlusCircle,
   Search,
@@ -28,6 +29,7 @@ import Item from './item'
 import { Navbar } from './navbar'
 import { TrashBox } from './trash-box'
 import UserItem from './user-item'
+import AIChat from './ai-chat'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -45,6 +47,12 @@ const Navigation = () => {
   const params = useParams()
 
   const create = useMutation(api.documents.create)
+
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const handleChat = () => {
+    setIsChatOpen(prev => !prev)
+  }
 
   useEffect(() => {
     if (isMobile) {
@@ -114,7 +122,6 @@ const Navigation = () => {
       sidebarRef.current.style.width = '0'
       navbarRef.current.style.setProperty('width', '100%')
       navbarRef.current.style.setProperty('left', '0')
-
       setTimeout(() => {
         setIsResetting(false)
       }, 200)
@@ -164,7 +171,7 @@ const Navigation = () => {
           <Item onClick={handleCreate} icon={Plus} label='New document' />
         </div>
         <Popover>
-          <PopoverTrigger className='mt-4 w-full'>
+          <PopoverTrigger className='w-full'>
             <Item label='Trash' icon={Trash} />
           </PopoverTrigger>
           <PopoverContent
@@ -174,6 +181,15 @@ const Navigation = () => {
             <TrashBox />
           </PopoverContent>
         </Popover>
+        <div className='mt-4 w-full'>
+          <Item
+            label='Chat with Adso'
+            icon={MessageCircle}
+            onClick={handleChat}
+          />
+        </div>
+        {isChatOpen && <AIChat />}
+
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
