@@ -1,6 +1,16 @@
 'use client'
 
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { api } from '@/convex/_generated/api'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
+import { useSearch } from '@/hooks/use-search'
+import { useSettings } from '@/hooks/use-settings'
 import { cn } from '@/lib/utils'
+import { useMutation } from 'convex/react'
 import {
   ChevronsLeft,
   MenuIcon,
@@ -12,22 +22,12 @@ import {
 } from 'lucide-react'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { useDeviceDetect } from '@/hooks/use-device-detect'
-import UserItem from './user-item'
-import { useMutation } from 'convex/react'
-import { api } from '@/convex/_generated/api'
-import Item from './item'
 import { toast } from 'sonner'
 import DocumentList from './document_list'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
-import { TrashBox } from './trash-box'
-import { useSearch } from '@/hooks/use-search'
-import { useSettings } from '@/hooks/use-settings'
+import Item from './item'
 import { Navbar } from './navbar'
+import { TrashBox } from './trash-box'
+import UserItem from './user-item'
 
 const Navigation = () => {
   const pathname = usePathname()
