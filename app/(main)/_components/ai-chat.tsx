@@ -4,7 +4,7 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation } from 'convex/react'
 import { Send } from 'lucide-react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 interface AIChatProps {
@@ -13,36 +13,51 @@ interface AIChatProps {
 
 export default function AIChat({ documentId }: AIChatProps) {
   const create = useMutation(api.messages.create)
+  const [messages, setMessages] = useState<
+    { role: 'user' | 'assistant'; content: string }[]
+  >([])
 
   const inputRef = useRef<HTMLInputElement>(null)
-  // Placeholder messages
-  const messages = [
-    { role: 'assistant', content: 'Hello! How can I help you today?' },
-    { role: 'user', content: 'What can you do?' },
-    {
-      role: 'assistant',
-      content:
-        'I can assist you with your documents, answer questions, and more.'
-    }
-  ]
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const content = inputRef.current?.value
+
+    // User's input
+    let content = inputRef.current?.value
     if (!content) return
 
-    const promise = create({
+    // Add user message
+    let promise = create({
       documentId,
       content,
       role: 'user'
     })
 
+    // Add user message to local state
+    messages.push({ role: 'user', content })
+
+    // AI's response
+    content = 'This is a simulated response from the AI.'
+
+    // Add AI message
+    promise = create({
+      documentId,
+      content,
+      role: 'assistant'
+    })
+
+    // Add AI message to local state
+    messages.push({
+      role: 'assistant',
+      content
+    })
+
+    setMessages([...messages])
+
     inputRef.current!.value = ''
 
     // TODO Remove after testing
     toast.promise(promise, {
-      loading: 'Sending message...',
-      success: 'Message sent successfully!',
       error: 'Failed to send message.'
     })
   }
