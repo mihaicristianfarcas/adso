@@ -6,13 +6,16 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { api } from '@/convex/_generated/api'
+import { Id } from '@/convex/_generated/dataModel'
 import { useDeviceDetect } from '@/hooks/use-device-detect'
 import { useSearch } from '@/hooks/use-search'
 import { useSettings } from '@/hooks/use-settings'
 import { cn } from '@/lib/utils'
 import { useMutation } from 'convex/react'
 import {
+  ChevronDown,
   ChevronsLeft,
+  ChevronUp,
   MenuIcon,
   MessageCircle,
   Plus,
@@ -24,12 +27,12 @@ import {
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import AIChat from './ai-chat'
 import DocumentList from './document_list'
 import Item from './item'
 import { Navbar } from './navbar'
 import { TrashBox } from './trash-box'
 import UserItem from './user-item'
-import AIChat from './ai-chat'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -181,14 +184,23 @@ const Navigation = () => {
             <TrashBox />
           </PopoverContent>
         </Popover>
-        <div className='mt-4 w-full'>
-          <Item
-            label='Chat with Adso'
-            icon={MessageCircle}
-            onClick={handleChat}
-          />
-        </div>
-        {isChatOpen && <AIChat />}
+        {params.documentId && (
+          <div className='mt-4 mr-4 flex w-full flex-row items-center justify-center'>
+            <Item
+              label='Chat with Adso'
+              icon={MessageCircle}
+              onClick={handleChat}
+            />
+            {isChatOpen ? (
+              <ChevronDown width={20} height={20} />
+            ) : (
+              <ChevronUp width={20} height={20} />
+            )}
+          </div>
+        )}
+        {isChatOpen && params.documentId && (
+          <AIChat documentId={params.documentId as Id<'documents'>} />
+        )}
 
         <div
           onMouseDown={handleMouseDown}

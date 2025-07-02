@@ -20,7 +20,9 @@ export default defineSchema({
   messages: defineTable({
     documentId: v.id('documents'),
     userId: v.string(),
-    content: v.string()
+    content: v.string(),
+    role: v.union(v.literal('user'), v.literal('assistant')),
+    metadata: v.optional(v.any())
   })
     .index('by_document', ['documentId'])
     .index('by_user', ['userId'])
