@@ -120,6 +120,7 @@ const Navigation = () => {
     if (sidebarRef.current && navbarRef.current) {
       setIsCollapsed(true)
       setIsResetting(true)
+      setIsChatOpen(false)
       sidebarRef.current.style.width = '0'
       navbarRef.current.style.setProperty('width', '100%')
       navbarRef.current.style.setProperty('left', '0')
@@ -146,7 +147,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col',
+          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col overflow-hidden',
           isResetting && 'transition-all duration-200 ease-in-out',
           isMobile && 'w-0'
         )}
@@ -193,6 +194,7 @@ const Navigation = () => {
           </div>
         )}
         {isChatOpen && params.documentId && (
+          // TODO add a blurry section under the Chat with Adso item
           <div className='flex-grow overflow-y-auto'>
             <AIChat documentId={params.documentId as Id<'documents'>} />
           </div>
