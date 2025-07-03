@@ -1,21 +1,53 @@
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useMutation } from 'convex/react'
 import { Send } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 interface AIChatProps {
   documentId: Id<'documents'>
 }
 
+interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 export default function AIChat({ documentId }: AIChatProps) {
   const create = useMutation(api.messages.create)
-  const [messages, setMessages] = useState<
-    { role: 'user' | 'assistant'; content: string }[]
-  >([])
+  const getConversationHistory = useMutation(
+    api.messages.getConversationHistory
+  )
+
+  const [messages, setMessages] = useState<Message[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      setIsLoading(true)
+      try {
+        const conversationHistory = await getConversationHistory({
+          documentId
+        })
+        setMessages(
+          conversationHistory.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          }))
+        )
+      } catch (error) {
+        console.error('Failed to fetch conversation history:', error)
+        toast.error('Failed to load conversation history.')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchMessages()
+  }, [documentId, getConversationHistory])
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -62,6 +94,13 @@ export default function AIChat({ documentId }: AIChatProps) {
     })
   }
 
+  if (isLoading)
+    return (
+      <div className='flex h-full items-center justify-center'>
+        <Spinner size='lg' />
+      </div>
+    )
+
   return (
     <div className='animate-in fade-in mx-auto flex h-full w-full flex-col rounded-md shadow-lg'>
       {/* Messages */}
@@ -88,10 +127,10 @@ export default function AIChat({ documentId }: AIChatProps) {
       </div>
       {/* Input */}
       <form
-        className='bg-popover flex items-center gap-2 rounded-lg px-4 py-3'
-        onSubmit={e => {
-          e.preventDefault()
-          handleSubmit(e)
+        className='bg-muted flex items-center gap-4 px-4 py-3'
+        onSubmit={event => {
+          event.preventDefault()
+          handleSubmit(event)
         }}
       >
         <Input
