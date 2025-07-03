@@ -115,7 +115,7 @@ export default function AIChat({ documentId }: AIChatProps) {
   }
 
   return (
-    <div className='animate-in fade-in mx-auto flex h-full w-full flex-col rounded-md shadow-lg'>
+    <div className='animate-in fade-in mx-auto flex h-full w-full flex-col rounded-md shadow-lg relative'>
       {/* Messages */}
       <div className='bg-muted flex-1 space-y-4 overflow-y-auto px-4 py-2'>
         {messages.map(msg => (
@@ -139,6 +139,16 @@ export default function AIChat({ documentId }: AIChatProps) {
         ))}
         <div ref={messagesEndRef} />
       </div>
+
+      {/* Gradient blur overlay above input */}
+      <div
+        className='absolute bottom-16 left-0 right-1 h-4 z-10 pointer-events-none'
+        style={{
+          mask: 'linear-gradient(transparent, black, black)',
+          backdropFilter: 'blur(2px)'
+        }}
+      />
+
       {/* Input */}
       <form
         className='bg-muted flex items-center gap-4 px-4 py-3'

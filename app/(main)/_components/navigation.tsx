@@ -194,9 +194,20 @@ const Navigation = () => {
           </div>
         )}
         {isChatOpen && params.documentId && (
-          // TODO add a blurry section under the Chat with Adso item
-          <div className='flex-grow overflow-y-auto'>
-            <AIChat documentId={params.documentId as Id<'documents'>} />
+          <div className='relative flex-grow overflow-hidden'>
+            {/* Gradient blur overlay */}
+            <div
+              className='pointer-events-none absolute top-0 right-1 left-0 z-10 h-4'
+              style={{
+                mask: 'linear-gradient(black, black, transparent)',
+                backdropFilter: 'blur(2px)'
+              }}
+            />
+
+            {/* Chat content */}
+            <div className='h-full overflow-y-auto'>
+              <AIChat documentId={params.documentId as Id<'documents'>} />
+            </div>
           </div>
         )}
 
