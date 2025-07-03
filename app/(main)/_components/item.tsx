@@ -2,20 +2,22 @@
 
 import {
   DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuContent
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
+import { useDeviceDetect } from '@/hooks/use-device-detect'
 import { cn } from '@/lib/utils'
 import { useUser } from '@clerk/clerk-react'
 import { useMutation } from 'convex/react'
 import {
   ChevronDown,
   ChevronRight,
+  ChevronsUpDown,
   LucideIcon,
   MoreHorizontal,
   Plus,
@@ -23,7 +25,6 @@ import {
 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { useDeviceDetect } from '@/hooks/use-device-detect'
 
 interface ItemProps {
   id?: Id<'documents'>
@@ -31,6 +32,7 @@ interface ItemProps {
   active?: boolean
   expanded?: boolean
   isSearch?: boolean
+  isChat?: boolean
   level?: number
   onExpand?: () => void
   label: string
@@ -46,6 +48,7 @@ const Item = ({
   active,
   documentIcon,
   isSearch,
+  isChat,
   level = 0,
   onExpand,
   expanded
@@ -176,6 +179,21 @@ const Item = ({
           >
             <Plus className='text-muted-foreground h-4 w-4' />
           </div>
+        </div>
+      )}
+      {isChat && (
+        <div
+          role='button'
+          onClick={event => {
+            event.stopPropagation()
+            onClick?.()
+          }}
+          className={cn(
+            'ml-auto h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600',
+            isTouchDevice ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+          )}
+        >
+          <ChevronsUpDown className='text-muted-foreground h-4 w-4' />
         </div>
       )}
     </div>

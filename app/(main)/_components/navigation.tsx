@@ -13,9 +13,7 @@ import { useSettings } from '@/hooks/use-settings'
 import { cn } from '@/lib/utils'
 import { useMutation } from 'convex/react'
 import {
-  ChevronDown,
   ChevronsLeft,
-  ChevronUp,
   MenuIcon,
   MessageCircle,
   Plus,
@@ -189,13 +187,9 @@ const Navigation = () => {
             <Item
               label='Chat with Adso'
               icon={MessageCircle}
+              isChat={true}
               onClick={handleChat}
             />
-            {isChatOpen ? (
-              <ChevronDown width={20} height={20} />
-            ) : (
-              <ChevronUp width={20} height={20} />
-            )}
           </div>
         )}
         {isChatOpen && params.documentId && (
