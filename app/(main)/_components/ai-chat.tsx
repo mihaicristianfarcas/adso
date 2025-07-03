@@ -1,24 +1,29 @@
+'use client'
+
 import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { useMutation } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import { Send } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+
+export interface Message {
+  role: 'user' | 'assistant'
+  content: string
+}
 
 interface AIChatProps {
   documentId: Id<'documents'>
 }
 
-interface Message {
-  role: 'user' | 'assistant'
-  content: string
-}
-
 export default function AIChat({ documentId }: AIChatProps) {
   const create = useMutation(api.messages.create)
+  const document = useQuery(api.documents.getById, {
+    documentId: documentId
+  })
   const getConversationHistory = useMutation(
     api.messages.getConversationHistory
   )
@@ -55,7 +60,7 @@ export default function AIChat({ documentId }: AIChatProps) {
     e.preventDefault()
 
     // User's input
-    let content = inputRef.current?.value
+    const content = inputRef.current?.value
     if (!content) return
 
     // Add user message
@@ -69,19 +74,36 @@ export default function AIChat({ documentId }: AIChatProps) {
     messages.push({ role: 'user', content })
 
     // AI's response
-    content = 'This is a simulated response from the AI.'
+    const apiResponse = await fetch('/api/ai', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        documentId,
+        conversationHistory: messages,
+        documentContent: document?.content || '',
+        latestMessage: { role: 'user', content }
+      })
+    })
+
+    if (!apiResponse.ok) {
+      throw new Error('Failed to get AI response')
+    }
+
+    const { response } = await apiResponse.json()
 
     // Add AI message
     promise = create({
       documentId,
-      content,
+      content: response,
       role: 'assistant'
     })
 
     // Add AI message to local state
     messages.push({
       role: 'assistant',
-      content
+      content: response
     })
 
     setMessages([...messages])
