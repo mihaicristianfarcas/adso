@@ -146,7 +146,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col overflow-y-auto',
+          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col',
           isResetting && 'transition-all duration-200 ease-in-out',
           isMobile && 'w-0'
         )}
@@ -193,7 +193,9 @@ const Navigation = () => {
           </div>
         )}
         {isChatOpen && params.documentId && (
-          <AIChat documentId={params.documentId as Id<'documents'>} />
+          <div className='flex-grow overflow-y-auto'>
+            <AIChat documentId={params.documentId as Id<'documents'>} />
+          </div>
         )}
 
         <div
