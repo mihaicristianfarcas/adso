@@ -1,5 +1,5 @@
 import { v } from 'convex/values'
-import { mutation } from './_generated/server'
+import { mutation, query } from './_generated/server'
 
 export const create = mutation({
   args: {
@@ -29,7 +29,7 @@ export const create = mutation({
   }
 })
 
-export const getConversationHistory = mutation({
+export const getConversationHistory = query({
   args: {
     documentId: v.id('documents')
   },
@@ -55,8 +55,9 @@ export const getConversationHistory = mutation({
     const conversationHistory = await ctx.db
       .query('messages')
       .withIndex('by_document', q => q.eq('documentId', args.documentId))
+      .order('asc')
       .collect()
 
-    return conversationHistory.sort((a, b) => a._creationTime - b._creationTime)
+    return conversationHistory
   }
 })
