@@ -29,7 +29,7 @@ interface.
 - **File Storage**: EdgeStore
 - **Styling**: Tailwind CSS, Radix UI
 
-## Getting Started
+## Developing
 
 ### Prerequisites
 
@@ -41,7 +41,7 @@ interface.
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/yourusername/adso.git
+   git clone https://github.com/mihaicristianfarcas/adso.git
    cd adso
    ```
 
@@ -78,17 +78,14 @@ interface.
 
 ## Usage
 
-- **Create a document**: Click the "+ New Page" button in the sidebar
+- **Create a document**: Click the "+ New Document" button in the sidebar
 - **Edit content**: Click on any document to open the editor
 - **Add cover image**: Use the cover image tool in the editor toolbar
 - **Customize icon**: Click the icon picker to change document icons
 - **Publish your work**: Use the "Publish" button to share your work easily via
   the provided preview link
+- **Chat with Adso**: Ask your AI assistant what you wish to know about the document
 - **Toggle theme**: Use the theme toggle in the navbar
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
