@@ -6,7 +6,6 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 import { api } from '@/convex/_generated/api'
-import { Id } from '@/convex/_generated/dataModel'
 import { useDeviceDetect } from '@/hooks/use-device-detect'
 import { useSearch } from '@/hooks/use-search'
 import { useSettings } from '@/hooks/use-settings'
@@ -15,7 +14,6 @@ import { useMutation } from 'convex/react'
 import {
   ChevronsLeft,
   MenuIcon,
-  MessageCircle,
   Plus,
   PlusCircle,
   Search,
@@ -25,7 +23,6 @@ import {
 import { useParams, usePathname, useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import AIChat from './ai-chat'
 import DocumentList from './document_list'
 import Item from './item'
 import { Navbar } from './navbar'
@@ -48,12 +45,6 @@ const Navigation = () => {
   const params = useParams()
 
   const create = useMutation(api.documents.create)
-
-  const [isChatOpen, setIsChatOpen] = useState(false)
-
-  const handleChat = () => {
-    setIsChatOpen(prev => !prev)
-  }
 
   useEffect(() => {
     if (isMobile) {
@@ -120,10 +111,10 @@ const Navigation = () => {
     if (sidebarRef.current && navbarRef.current) {
       setIsCollapsed(true)
       setIsResetting(true)
-      setIsChatOpen(false)
       sidebarRef.current.style.width = '0'
       navbarRef.current.style.setProperty('width', '100%')
       navbarRef.current.style.setProperty('left', '0')
+
       setTimeout(() => {
         setIsResetting(false)
       }, 200)
@@ -147,7 +138,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col overflow-hidden',
+          'group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col overflow-y-auto',
           isResetting && 'transition-all duration-200 ease-in-out',
           isMobile && 'w-0'
         )}
@@ -173,7 +164,7 @@ const Navigation = () => {
           <Item onClick={handleCreate} icon={Plus} label='New document' />
         </div>
         <Popover>
-          <PopoverTrigger className='w-full'>
+          <PopoverTrigger className='mt-4 w-full'>
             <Item label='Trash' icon={Trash} />
           </PopoverTrigger>
           <PopoverContent
@@ -183,34 +174,6 @@ const Navigation = () => {
             <TrashBox />
           </PopoverContent>
         </Popover>
-        {params.documentId && (
-          <div className='mt-4 mr-4 flex w-full flex-row items-center justify-center'>
-            <Item
-              label='Chat with Adso'
-              icon={MessageCircle}
-              isChat={true}
-              onClick={handleChat}
-            />
-          </div>
-        )}
-        {isChatOpen && params.documentId && (
-          <div className='relative flex-grow overflow-hidden'>
-            {/* Gradient blur overlay */}
-            <div
-              className='pointer-events-none absolute top-0 right-1 left-0 z-10 h-4'
-              style={{
-                mask: 'linear-gradient(black, black, transparent)',
-                backdropFilter: 'blur(2px)'
-              }}
-            />
-
-            {/* Chat content */}
-            <div className='h-full overflow-y-auto'>
-              <AIChat documentId={params.documentId as Id<'documents'>} />
-            </div>
-          </div>
-        )}
-
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
