@@ -211,14 +211,13 @@ export default function AIChat({ documentId }: AIChatProps) {
         onMouseDown={handleMouseDown}
         onClick={resetWidth}
         className={cn(
-          'bg-primary/10 absolute top-0 left-0 h-full w-1 cursor-ew-resize',
+          'bg-primary/10 absolute top-0 left-0 z-10 h-full w-1 cursor-ew-resize',
           isMobile
             ? 'hidden' // Hide resize handle on mobile
             : isTouchDevice
               ? 'opacity-100'
               : 'opacity-0 group-hover/sidebar:opacity-100'
         )}
-        style={{ zIndex: 10 }}
       />
       {/* Chat content */}
       <div className='flex h-full w-full flex-col'>
