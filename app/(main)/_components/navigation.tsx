@@ -28,6 +28,8 @@ import Item from './item'
 import { Navbar } from './navbar'
 import { TrashBox } from './trash-box'
 import UserItem from './user-item'
+import AIChat from './ai-chat'
+import { Id } from '@/convex/_generated/dataModel'
 
 const Navigation = () => {
   const pathname = usePathname()
@@ -45,6 +47,12 @@ const Navigation = () => {
   const params = useParams()
 
   const create = useMutation(api.documents.create)
+
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
+  const handleChatToggle = () => {
+    setIsChatOpen(prev => !prev)
+  }
 
   useEffect(() => {
     if (isMobile) {
@@ -93,6 +101,9 @@ const Navigation = () => {
 
   const resetWidth = () => {
     if (sidebarRef.current && navbarRef.current) {
+      if (isMobile) {
+        setIsChatOpen(false)
+      }
       setIsCollapsed(false)
       setIsResetting(true)
       sidebarRef.current.style.width = isMobile ? '100%' : '240px'
@@ -194,7 +205,16 @@ const Navigation = () => {
         )}
       >
         {!!params.documentId ? (
-          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+          <>
+            <Navbar
+              isCollapsed={isCollapsed}
+              onResetWidth={resetWidth}
+              onChatToggle={handleChatToggle}
+            />
+            {isChatOpen && (
+              <AIChat documentId={params.documentId as Id<'documents'>} />
+            )}
+          </>
         ) : (
           <nav className='w-full bg-transparent px-3 py-2'>
             {isCollapsed && (
