@@ -14,6 +14,9 @@ import { cn } from '@/lib/utils'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { useUser } from '@clerk/clerk-react'
 import { useDeviceDetect } from '@/hooks/use-device-detect'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import rehypeHighlight from 'rehype-highlight'
 
 export interface Message {
   role: 'user' | 'assistant'
@@ -236,13 +239,24 @@ export default function AIChat({ documentId }: AIChatProps) {
               )}
               <div
                 className={
-                  'max-w-[85%] rounded-xl px-3 py-2 text-xs break-words whitespace-pre-line md:max-w-[80%] md:text-sm ' +
+                  'max-w-[85%] rounded-xl px-3 py-2 text-xs break-words md:max-w-[80%] md:text-sm ' +
                   (msg.role === 'user'
                     ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted text-foreground border')
+                    : 'bg-muted text-foreground prose prose-sm dark:prose-invert border')
                 }
               >
-                {msg.content}
+                {msg.role === 'assistant' ? (
+                  <div className='prose prose-sm dark:prose-invert'>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeHighlight]}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  msg.content
+                )}
               </div>
               {msg.role === 'user' && (
                 <Avatar className='h-5 w-5 flex-shrink-0 md:h-6 md:w-6'>
