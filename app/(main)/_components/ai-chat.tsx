@@ -201,7 +201,7 @@ export default function AIChat({ documentId }: AIChatProps) {
     <aside
       ref={sidebarRef}
       className={cn(
-        'group/sidebar bg-muted border-border fixed top-13 right-0 bottom-0 z-[99998] flex flex-shrink-0 flex-col border-l shadow-lg',
+        'group/sidebar bg-background border-border fixed top-13 right-0 bottom-0 z-[99998] flex flex-shrink-0 flex-col border shadow-lg',
         'w-[360px] md:w-[400px] lg:w-[440px]',
         isResetting && 'transition-all duration-200 ease-in-out',
         isMobile && 'left-0 w-full border-t border-l-0'

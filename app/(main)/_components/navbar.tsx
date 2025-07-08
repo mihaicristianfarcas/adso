@@ -44,7 +44,7 @@ export const Navbar = ({
 
   return (
     <>
-      <nav className='bg-background flex w-full items-center gap-x-4 px-3 py-2'>
+      <nav className='bg-background border-border flex w-full items-center gap-x-4 border-b px-3 py-2'>
         {isCollapsed && (
           <MenuIcon
             role='button'
