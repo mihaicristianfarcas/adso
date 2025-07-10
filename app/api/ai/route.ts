@@ -16,7 +16,7 @@ interface AIChatRequest {
   latestMessage: Message
 }
 
-async function generateResponse({
+async function generateStreamResponse({
   conversationHistory,
   documentContent,
   latestMessage
@@ -40,15 +40,11 @@ AI:`
     console.log('Document content:', documentContent)
     console.log('Latest message:', latestMessage)
 
-    const result = await model.generateContent(prompt)
-    const response = await result.response
-
-    console.log('Generated response:', response.text())
-
-    return response.text() || ''
+    const result = await model.generateContentStream(prompt)
+    return result.stream
   } catch (error) {
     console.error('Error getting response:', error)
-    return 'Unable to generate a response at this time.'
+    throw error
   }
 }
 
@@ -56,9 +52,35 @@ export async function POST(request: NextRequest) {
   try {
     const body: AIChatRequest = await request.json()
 
-    const response = await generateResponse(body)
+    const stream = await generateStreamResponse(body)
 
-    return NextResponse.json({ response })
+    // Create a ReadableStream for streaming the response
+    const encoder = new TextEncoder()
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const chunkText = chunk.text()
+            if (chunkText) {
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ content: chunkText })}\n\n`))
+            }
+          }
+          controller.enqueue(encoder.encode(`data: [DONE]\n\n`))
+          controller.close()
+        } catch (error) {
+          console.error('Streaming error:', error)
+          controller.error(error)
+        }
+      }
+    })
+
+    return new Response(readableStream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+      },
+    })
   } catch (error) {
     console.error('API Error:', error)
     return NextResponse.json(

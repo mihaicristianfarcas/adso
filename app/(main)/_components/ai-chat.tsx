@@ -104,13 +104,15 @@ export default function AIChat({ documentId }: AIChatProps) {
   }
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [streamingMessage, setStreamingMessage] = useState('')
+  const [isStreaming, setIsStreaming] = useState(false)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+  }, [messages, streamingMessage])
 
   const handleSubmit = async (
     e?:
@@ -142,7 +144,7 @@ export default function AIChat({ documentId }: AIChatProps) {
         { role: 'user', content }
       ]
 
-      // AI's response
+      // AI's streaming response
       const apiResponse = await fetch('/api/ai', {
         method: 'POST',
         headers: {
@@ -160,14 +162,56 @@ export default function AIChat({ documentId }: AIChatProps) {
         throw new Error('Failed to get AI response')
       }
 
-      const { response } = await apiResponse.json()
+      // Handle streaming response
+      setIsStreaming(true)
+      setStreamingMessage('')
+
+      const reader = apiResponse.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullResponse = ''
+
+      if (reader) {
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+
+            const chunk = decoder.decode(value)
+            const lines = chunk.split('\n')
+
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6)
+                if (data === '[DONE]') {
+                  break
+                }
+                try {
+                  const parsed = JSON.parse(data)
+                  if (parsed.content) {
+                    fullResponse += parsed.content
+                    setStreamingMessage(fullResponse)
+                  }
+                } catch (e) {
+                  // Skip invalid JSON
+                  console.warn('Invalid JSON in stream:', e, data)
+                }
+              }
+            }
+          }
+        } finally {
+          reader.releaseLock()
+        }
+      }
 
       // Add AI message to database
       await create({
         documentId,
-        content: response,
+        content: fullResponse,
         role: 'assistant'
       })
+
+      setIsStreaming(false)
+      setStreamingMessage('')
 
       inputRef.current!.value = ''
       // Reset textarea height
@@ -251,22 +295,25 @@ export default function AIChat({ documentId }: AIChatProps) {
                       rehypePlugins={[rehypeHighlight]}
                       components={{
                         pre: ({ children, ...props }) => (
-                          <pre {...props} className="overflow-x-auto whitespace-pre-wrap break-words">
+                          <pre
+                            {...props}
+                            className='overflow-x-auto break-words whitespace-pre-wrap'
+                          >
                             {children}
                           </pre>
                         ),
                         code: ({ children, ...props }) => (
-                          <code {...props} className="break-words">
+                          <code {...props} className='break-words'>
                             {children}
                           </code>
                         ),
                         p: ({ children, ...props }) => (
-                          <p {...props} className="break-words">
+                          <p {...props} className='break-words'>
                             {children}
                           </p>
                         ),
                         a: ({ children, ...props }) => (
-                          <a {...props} className="break-all">
+                          <a {...props} className='break-all'>
                             {children}
                           </a>
                         )
@@ -286,6 +333,49 @@ export default function AIChat({ documentId }: AIChatProps) {
               )}
             </div>
           ))}
+          {/* Streaming message */}
+          {isStreaming && streamingMessage && (
+            <div className='flex justify-start gap-x-2'>
+              <Avatar className='h-5 w-5 flex-shrink-0 md:h-6 md:w-6'>
+                <BotIcon className='h-4 w-4 md:h-5 md:w-5' />
+              </Avatar>
+              <div className='bg-muted text-foreground prose prose-sm dark:prose-invert max-w-[85%] rounded-xl border px-3 py-2 text-xs break-words md:max-w-[80%] md:text-sm'>
+                <div className='prose prose-sm dark:prose-invert overflow-hidden'>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeHighlight]}
+                    components={{
+                      pre: ({ children, ...props }) => (
+                        <pre
+                          {...props}
+                          className='overflow-x-auto break-words whitespace-pre-wrap'
+                        >
+                          {children}
+                        </pre>
+                      ),
+                      code: ({ children, ...props }) => (
+                        <code {...props} className='break-words'>
+                          {children}
+                        </code>
+                      ),
+                      p: ({ children, ...props }) => (
+                        <p {...props} className='break-words'>
+                          {children}
+                        </p>
+                      ),
+                      a: ({ children, ...props }) => (
+                        <a {...props} className='break-all'>
+                          {children}
+                        </a>
+                      )
+                    }}
+                  >
+                    {streamingMessage}
+                  </ReactMarkdown>
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
