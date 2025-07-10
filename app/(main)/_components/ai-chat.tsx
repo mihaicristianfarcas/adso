@@ -245,10 +245,32 @@ export default function AIChat({ documentId }: AIChatProps) {
                 }
               >
                 {msg.role === 'assistant' ? (
-                  <div className='prose prose-sm dark:prose-invert'>
+                  <div className='prose prose-sm dark:prose-invert overflow-hidden'>
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeHighlight]}
+                      components={{
+                        pre: ({ children, ...props }) => (
+                          <pre {...props} className="overflow-x-auto whitespace-pre-wrap break-words">
+                            {children}
+                          </pre>
+                        ),
+                        code: ({ children, ...props }) => (
+                          <code {...props} className="break-words">
+                            {children}
+                          </code>
+                        ),
+                        p: ({ children, ...props }) => (
+                          <p {...props} className="break-words">
+                            {children}
+                          </p>
+                        ),
+                        a: ({ children, ...props }) => (
+                          <a {...props} className="break-all">
+                            {children}
+                          </a>
+                        )
+                      }}
                     >
                       {msg.content}
                     </ReactMarkdown>
